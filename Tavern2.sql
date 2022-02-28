@@ -90,6 +90,27 @@ CREATE TABLE Sales(
 	PurchDate VARCHAR(100)
 );
 
+/*create guests table to show relevant info*/
+CREATE TABLE Guests (
+	ID INT IDENTITY,
+	Guest VARCHAR(100),	
+	GStatusID VARCHAR(100),
+	GClassID VARCHAR(100),
+	GLevelID INT
+);
+
+/*create table for various statuses*/
+CREATE TABLE GuestStatus(
+	ID INT IDENTITY,
+	GStatus VARCHAR(100)
+);
+
+/*guestClass exists specifically to hold classes array */
+CREATE TABLE GuestClass(
+	ID INT IDENTITY,
+	GClass VARCHAR(100)
+);
+
 
 
 INSERT INTO Locations (LocationName) values
