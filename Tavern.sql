@@ -87,13 +87,20 @@ CREATE TABLE Sales(
 	TavernID INT,
 	Price MONEY,
 	QuantPurch INT,
-	PurchDate DATETIME
+	PurchDate VARCHAR(100)
 );
 
 
 
 INSERT INTO Locations (LocationName) values
-	('intersection of fifth and market');
+	('intersection of fifth and market'),
+	('123 Main street'),
+	('Third star to the right, and straight on til morning'),
+	('1 Royal Place'),
+	('Jonestown'),
+	('Market bazaar, stall 15'),
+	('northern most manhole cover, Poopville, Dreamland'),
+	('32 Adventure lane, Nicetown, Dreamland');
 
 
 INSERT INTO Taverns (Tavern,TavOwner,Floors) values
@@ -113,24 +120,67 @@ INSERT INTO Rats (TavernID, Rat) values
 	(3, 'Jam'),
 	(3, 'Jym'),
 	(2, 'Jimy'),
-	(2, 'Jimmy'),
+	(6, 'Jimmy'),
 	(5, 'Jim'),
 	(4, 'Jam'),
-	(5, 'Jom');
+	(7, 'Jom');
 
 INSERT INTO Roles (Role, RoleDesc) values
-	('Bartender','serves drinks');
+	('Bartender','serves drinks'),
+	('Waitress','Takes orders and serves food'),
+	('Janitor','various cleaning tasks'),
+	('Shopkeep','sells taverns wares and services'),
+	('Shady Vendor','sells questionable wares');
 
 INSERT INTO Workers (Worker) values
-	('Jim');
+	('Uther Bolitho'),
+	('Comoere Martin'),
+	('Humfra Roskruge'),
+	('Freoc Killigrew'),
+	('Catgutic Rosevear'),
+	('Brytthael Trewella'),
+	('Bleidiud Bennetto'),
+	('Dofagan Dowrick'),
+	('Clemmo Runnalls'),
+	('Casworon Trewarne');
+
 
 INSERT INTO WorkRoles (WorkerID, RoleID) Values
-	(1,1);
+	(1,1),
+	(2,1),
+	(3,1),
+	(4,2),
+	(5,2),
+	(6,3),
+	(7,4),
+	(8,4),
+	(9,4),
+	(10,5);
 
+INSERT INTO Supplies(Unit, Item, Stock, Price) values
+	(1,1, 1, 1)
+	;
+
+INSERT INTO Inventory(SupplyID,TavernID,Cost,Received) values
+	(1, 1, 23.50, 23.50)
+
+;
+
+INSERT INTO TavernServices (Service, cost, status) values
+	('Sword Honing', 23.50, 'Available')
+;
+
+INSERT INTO Sales(CustID,ServiceID,TavernID,Price,QuantPurch,PurchDate) values
+	(1,1,1,23.50,2, '2004-05-23 12:25:10')
+;
 
 SELECT * FROM Taverns T
-JOIN Rats R ON T.ID = R.TavernID;-- shows only taverns with rats, sorted by Rats table ID
+--JOIN Rats R ON T.ID = R.TavernID;-- shows only taverns with rats, sorted by Rats table ID
+SELECT * FROM Workers
 
+SELECT * FROM TavernServices
+
+SELECT * FROM Sales
 
 
 
