@@ -1,4 +1,6 @@
 /*drop tables in reverse order of creation*/
+DROP TABLE IF exists Sales
+DROP TABLE IF exists TavernServices
 DROP TABLE IF exists Inventory
 DROP TABLE IF exists Supplies
 DROP TABLE IF exists WorkRoles
@@ -49,7 +51,7 @@ CREATE TABLE Roles (
 );
 
 CREATE TABLE WorkRoles(
-	UserID INT,
+	WorkerID INT,
 	RoleID INT
 );
 
@@ -69,13 +71,26 @@ CREATE TABLE Inventory(
 	InvDate DATETIME
 );
 
-/*
+
 /* table needs name of service, description of service, status, */
-CREATE TABLE [SERVICES]();
+CREATE TABLE TavernServices (
+	ID INT IDENTITY,
+	Service VARCHAR(250),
+	Cost MONEY,
+	Status VARCHAR(100)
+);
+
+CREATE TABLE Sales(
+	SaleID INT IDENTITY,
+	CustID INT,
+	ServiceID INT,
+	TavernID INT,
+	Price MONEY,
+	QuantPurch INT,
+	PurchDate DATETIME
+);
 
 
-
-*/
 
 INSERT INTO Locations (LocationName) values
 	('intersection of fifth and market');
@@ -109,7 +124,7 @@ INSERT INTO Roles (Role, RoleDesc) values
 INSERT INTO Workers (Worker) values
 	('Jim');
 
-INSERT INTO WorkRoles (UserID, RoleID) Values
+INSERT INTO WorkRoles (WorkerID, RoleID) Values
 	(1,1);
 
 
