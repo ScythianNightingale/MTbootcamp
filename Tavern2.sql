@@ -1,5 +1,9 @@
 /*drop tables in reverse order of creation*/
 DROP TABLE IF exists Sales
+DROP TABLE IF exists Guests
+DROP TABLE IF exists GuestClass
+DROP TABLE IF exists GuestStatus
+DROP TABLE IF exists OtherServices
 DROP TABLE IF exists TavernServices
 DROP TABLE IF exists Inventory
 DROP TABLE IF exists Supplies
@@ -9,6 +13,7 @@ DROP TABLE IF exists Workers
 DROP TABLE IF exists Rats
 DROP TABLE IF exists Taverns
 DROP TABLE IF exists Locations
+
 
 /* table needs ID and name(place)*/
 CREATE TABLE Locations (
@@ -40,7 +45,8 @@ CREATE TABLE Rats (
 /* table needs names and roles w/ description (eg. bonnie, barmaid (serves drinks)) */
 CREATE TABLE Workers (
 	ID INT IDENTITY,
-	Worker varchar(100)
+	Worker varchar(100),
+	RoleID INT
 );
 
 /* table needs names and description of roles */
@@ -80,24 +86,6 @@ CREATE TABLE TavernServices (
 	Status VARCHAR(100)
 );
 
-CREATE TABLE Sales(
-	SaleID INT IDENTITY,
-	CustID INT,
-	ServiceID INT,
-	TavernID INT,
-	Price MONEY,
-	QuantPurch INT,
-	PurchDate VARCHAR(100)
-);
-
-/*create guests table to show relevant info*/
-CREATE TABLE Guests (
-	ID INT IDENTITY,
-	Guest VARCHAR(100),	
-	GStatusID VARCHAR(100),
-	GClassID VARCHAR(100),
-	GLevelID INT
-);
 
 /*create table for various statuses*/
 CREATE TABLE GuestStatus(
@@ -111,7 +99,32 @@ CREATE TABLE GuestClass(
 	GClass VARCHAR(100)
 );
 
+/*create guests table to show relevant info*/
+CREATE TABLE Guests (
+	ID INT IDENTITY,
+	Guest VARCHAR(100),	
+	GClassID INT,
+	GLevelID INT,
+	GNote VARCHAR(MAX),
+	GBday DATE,
+	GCakeday DATE,
+	GStatusID VARCHAR(100)
+	PRIMARY KEY (Guest)
+);
 
+CREATE TABLE Sales(
+	SaleID INT IDENTITY,
+	CustID VARCHAR(100),
+	TavernID INT,
+	SupandServID INT,
+	Price MONEY,
+	QtyPurch INT,
+	PurchDate VARCHAR(100)
+	PRIMARY KEY (SaleID),
+	FOREIGN KEY (TavernID) REFERENCES Taverns(ID),
+	FOREIGN KEY (CustID) REFERENCES Guests(Guest),
+);
+go
 
 INSERT INTO Locations (LocationName) values
 	('intersection of fifth and market'),
@@ -180,7 +193,7 @@ INSERT INTO WorkRoles (WorkerID, RoleID) Values
 
 INSERT INTO Supplies(Unit, Item, Stock, Price) values
 	(1,1, 1, 1)
-	;
+;
 
 INSERT INTO Inventory(SupplyID,TavernID,Cost,Received) values
 	(1, 1, 23.50, 23.50)
@@ -191,17 +204,54 @@ INSERT INTO TavernServices (Service, cost, status) values
 	('Sword Honing', 23.50, 'Available')
 ;
 
-INSERT INTO Sales(CustID,ServiceID,TavernID,Price,QuantPurch,PurchDate) values
-	(1,1,1,23.50,2, '2004-05-23 12:25:10')
+INSERT INTO GUESTS (Guest) Values 
+	('Jim Darkmagic'),
+	('Gladys Wild');
+
+
+INSERT INTO Sales(CustID,TavernID,SupandServID,Price,QtyPurch,PurchDate) values
+	('Jim Darkmagic',1,1,23.50,2, '2004-05-23 12:25:10')
 ;
 
+
+/**
+
+
+INSERT INTO Sales(CustID,TavernID,SupandServID,Price,QtyPurch,PurchDate) values
+	(1,2,1,23.50,1, timestamp),
+	(2,3,1,23.50,2, timestamp)
+
+should output
+
+SALE ID    |    Guest     |    Tavern    |    Item/Service Purchased   |     Price     |  Qty Purchased   |    PurchDate
+   1       | Jim Darkmagic|    Mollys    |      Sword Sharpening       |     23.50     |        1         |    PurchDate
+   2       | Gladys Wild  |    Millys    |      Sword Sharpening       |     47.00     |        2         |    PurchDate
+
+
+
+
+*/
+
+/*
 SELECT * FROM Taverns 
---JOIN Rats ON Taverns.ID = Rats.TavernID;-- shows only taverns with rats, sorted by Rats table ID
+JOIN Rats ON Taverns.ID = Rats.TavernID;-- shows only taverns with rats, sorted by Rats table ID
 SELECT * FROM Workers
 
 SELECT * FROM TavernServices
 
 SELECT * FROM Sales
+*/
 
 
+/*query the database - "SELECT CREATE"
+Using Filter "Where"
+ex. generate the following several times in order to display a select statement to display each individual tavern
+Select * from taverns where name = 'the mended drum'*/
 
+--SELECT * FROM Taverns WHERE Taverns.Tavern = + Taverns.Tavern --incorrect for the guide
+
+--select CONCAT('select * from Taverns where Tavern =''',Tavern, '''') FROM Taverns  --outputs string with given data
+
+--select 'select * from Taverns where Tavern = ''' + Taverns.tavern + '''' FROM Taverns  --same result as CONCAT but more cumbersome
+
+select * from Sales
