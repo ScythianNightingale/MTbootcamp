@@ -227,7 +227,7 @@ SALE ID    |    Guest     |    Tavern    |    Item/Service Purchased   |     Pri
    1       | Jim Darkmagic|    Mollys    |      Sword Sharpening       |     23.50     |        1         |    PurchDate
    2       | Gladys Wild  |    Millys    |      Sword Sharpening       |     47.00     |        2         |    PurchDate
 
-
+need to figure out how to input an int to point to another table, and output as text during "select" command. may not be possible in SQL
 
 
 */
@@ -254,4 +254,3 @@ Select * from taverns where name = 'the mended drum'*/
 
 --select 'select * from Taverns where Tavern = ''' + Taverns.tavern + '''' FROM Taverns  --same result as CONCAT but more cumbersome
 
-select * from Sales
