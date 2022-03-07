@@ -10,9 +10,10 @@ DROP TABLE IF exists Supplies
 DROP TABLE IF exists WorkRoles
 DROP TABLE IF exists Roles
 DROP TABLE IF exists Workers
-DROP TABLE IF exists Rats
+--DROP TABLE IF exists Rats
 DROP TABLE IF exists Taverns
 DROP TABLE IF exists Locations
+
 
 
 /* table needs ID and name(place)*/
@@ -23,16 +24,15 @@ CREATE TABLE Locations (
 	);
 
 /*table needs name, location, info about owner, total floors, and rats in basement*/
-CREATE TABLE [Taverns] (
-	ID INT IDENTITY,
+CREATE TABLE Taverns (
+	ID INT PRIMARY KEY IDENTITY,
 	Tavern varchar(100),
 	TavOwner varchar(100),
 	LocationID INT,
-	Floors INT,
-	PRIMARY KEY (ID),
+	Floors INT
 );
 
-/* table needs names and which tavern the're part of */
+/* table needs names and which tavern the're part of 
 CREATE TABLE Rats ( 
 	ID INT IDENTITY, 
 	Rat varchar(100),
@@ -40,6 +40,7 @@ CREATE TABLE Rats (
 	PRIMARY KEY (ID),
 	FOREIGN KEY (TavernID) REFERENCES Taverns(ID)
 );
+*/
 
 
 /* table needs names and roles w/ description (eg. bonnie, barmaid (serves drinks)) */
@@ -87,44 +88,41 @@ CREATE TABLE TavernServices (
 );
 
 
-/*create table for various statuses*/
-CREATE TABLE GuestStatus(
-	ID INT IDENTITY,
-	GStatus VARCHAR(100)
-);
-
 /*guestClass exists specifically to hold classes array */
 CREATE TABLE GuestClass(
 	ID INT IDENTITY,
-	GClass VARCHAR(100)
+	GClass VARCHAR(100),
+	GLevel int,
+	PRIMARY KEY (ID)
 );
 
 /*create guests table to show relevant info*/
 CREATE TABLE Guests (
 	ID INT IDENTITY,
 	Guest VARCHAR(100),	
-	GClassID INT,
-	GLevelID INT,
 	GNote VARCHAR(MAX),
 	GBday DATE,
 	GCakeday DATE,
-	GStatusID VARCHAR(100)
-	PRIMARY KEY (Guest)
+	GStatus VARCHAR(100),
+	GClassID INT,
+	PRIMARY KEY (Guest),
+	FOREIGN KEY (GClassID) REFERENCES GuestClass(ID)
 );
-
+/*
 CREATE TABLE Sales(
 	SaleID INT IDENTITY,
 	CustID VARCHAR(100),
-	TavernID INT,
+	--TavernID INT,
 	SupandServID INT,
 	Price MONEY,
 	QtyPurch INT,
 	PurchDate VARCHAR(100)
 	PRIMARY KEY (SaleID),
-	FOREIGN KEY (TavernID) REFERENCES Taverns(ID),
+	--FOREIGN KEY (TavernID) REFERENCES Taverns(ID),
 	FOREIGN KEY (CustID) REFERENCES Guests(Guest),
 );
-go
+*/
+
 
 INSERT INTO Locations (LocationName) values
 	('intersection of fifth and market'),
@@ -146,7 +144,7 @@ INSERT INTO Taverns (Tavern,TavOwner,Floors) values
 	('Mallys','Malone',4),
 	('Mullys','Mulder',4);
 
-
+/*
 INSERT INTO Rats (TavernID, Rat) values
 	(1, 'Jim'),
 	(2, 'Jim'),
@@ -158,6 +156,7 @@ INSERT INTO Rats (TavernID, Rat) values
 	(5, 'Jim'),
 	(4, 'Jam'),
 	(7, 'Jom');
+*/
 
 INSERT INTO Roles (Role, RoleDesc) values
 	('Bartender','serves drinks'),
@@ -203,16 +202,19 @@ INSERT INTO Inventory(SupplyID,TavernID,Cost,Received) values
 INSERT INTO TavernServices (Service, cost, status) values
 	('Sword Honing', 23.50, 'Available')
 ;
+insert into GuestClass (GClass, Glevel) values
+	('warrior',3),
+	('mage',2)
+;
+INSERT INTO GUESTS (Guest,GNote, GBday, GCakeday, GStatus,GClassID) Values 
+	('Jim Darkmagic', 'no notes', '2002-01-01', '2012-01-01', 'Alive', 1),
+	('Gladys Wild', 'no notes', '2002-01-01', '2012-01-01', 'Alive', 2);
 
-INSERT INTO GUESTS (Guest) Values 
-	('Jim Darkmagic'),
-	('Gladys Wild');
-
-
+/*
 INSERT INTO Sales(CustID,TavernID,SupandServID,Price,QtyPurch,PurchDate) values
 	('Jim Darkmagic',1,1,23.50,2, '2004-05-23 12:25:10')
 ;
-
+*/
 
 /**
 
@@ -242,6 +244,11 @@ SELECT * FROM TavernServices
 SELECT * FROM Sales
 */
 
+/*Select 
+( Select 'Welcome, ' +Taverns.TavOwner + '. your tavern at ' + Locations.LocationName + '  is doing well. the last thing we sold was '/* + TavernServices.Service + ' for $' TavernServices.price */ from Taverns, Locations)
+  from Taverns where taverns.id = 1 
+
+*/
 
 /*query the database - "SELECT CREATE"
 Using Filter "Where"
@@ -254,3 +261,4 @@ Select * from taverns where name = 'the mended drum'*/
 
 --select 'select * from Taverns where Tavern = ''' + Taverns.tavern + '''' FROM Taverns  --same result as CONCAT but more cumbersome
 
+select * from Guests
