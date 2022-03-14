@@ -108,20 +108,19 @@ CREATE TABLE Guests (
 	PRIMARY KEY (Guest),
 	FOREIGN KEY (GClassID) REFERENCES GuestClass(ID)
 );
-/*
+
 CREATE TABLE Sales(
 	SaleID INT IDENTITY,
 	CustID VARCHAR(100),
-	--TavernID INT,
+	TavernID INT,
 	SupandServID INT,
 	Price MONEY,
 	QtyPurch INT,
 	PurchDate VARCHAR(100)
 	PRIMARY KEY (SaleID),
-	--FOREIGN KEY (TavernID) REFERENCES Taverns(ID),
-	FOREIGN KEY (CustID) REFERENCES Guests(Guest),
+	FOREIGN KEY (TavernID) REFERENCES Taverns(ID)
 );
-*/
+
 
 
 INSERT INTO Locations (LocationName) values
